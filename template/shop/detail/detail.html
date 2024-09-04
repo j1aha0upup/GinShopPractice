@@ -1,0 +1,201 @@
+{{define "shop/detail/detail.html"}}
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="author" content="order by dede58.com" />
+	<title>详情</title>
+	<link rel="stylesheet" type="text/css" href="/static/shop/css/style.css">
+	<link rel="stylesheet" href="/static/shop/css/swiper.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/shop/css/product.css">
+	<script src="/static/shop/js/jquery-1.10.1.js"></script>
+	<script src="/static/shop/js/swiper.min.js"></script>
+	<script src="/static/shop/js/base.js"> </script>
+</head>
+
+<body>
+	<!-- start header -->
+	{{template "shop/public/publicHeader.html" .}}
+	{{ template "shop/public/publicMiddle.html" .}}
+	<!--end header -->
+	<form action="/doAddCart" method="post">
+		<div class="xiangqing">
+			<div class="neirong w">
+				<div class="xiaomi6 fl">{{.goods.Title}}</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<div class="jieshao mt20 w">
+			<div class="left fl">
+				<div class="swiper-container">
+					<div class="swiper-wrapper" id="item-focus">
+						{{range .goodsImages}}
+						<div class="swiper-slide">
+							<img src="/{{.ImageUrl}}" style="width: 600px;height: 600px;">
+						</div>
+						{{end}}
+					</div>
+					<div class="swiper-pagination"></div>
+					<!-- Add Arrows -->
+					<div class="swiper-button-next"></div>
+					<div class="swiper-button-prev"></div>
+				</div>
+			</div>
+			<div class="right fr">
+				<div class="h3 ml20 mt20">{{.goods.Title}}</div>
+				<div class="jianjie mr40 ml20 mt10">{{.goodsAttrsStr}}</div>
+				<div class="jiage ml20 mt10">{{.goods.ShopPrice}}</div>
+				<div class="ft20 ml20 mt20">选择版本</div>
+				<div class="xzbb ml20 mt10">
+					{{with .goods}}
+					<div class="banben fr active">
+						<a href="detail?goodsId={{.Id}}">
+							<span>{{.Title}}</span>
+							<span>{{.ShopPrice}}</span>
+						</a>
+					</div>
+					{{end}}
+					{{range .relationGoods}}
+					{{if ne $.goods.Id .Id}}
+					<div class="banben fr">
+						<a href="detail?goodsId={{.Id}}">
+							<span>{{.Title}}</span>
+							<span>{{.ShopPrice}}</span>
+						</a>
+					</div>
+					{{end}}
+					{{end}}
+					<div class="clear"></div>
+				</div>
+
+				{{if ne .goodsColorLen 0}}
+				<div class="ft20 ml20 mt20">选择颜色</div>
+				<div class="xzbb ml20 mt10" id="color_list">
+					{{range .goodsColor}}
+					<div class="banben" goodsId="{{$.goods.Id}}" colorId="{{.Id}}">
+						<a>
+							<span class="yuandian" style="background-color: {{.ColorValue}};"></span>
+							<span class="yanse">{{.ColorName}}</span>
+						</a>
+					</div>
+					{{end}}
+				</div>
+				{{end}}
+
+				{{with .goods}}
+				<div class="xqxq mt20 ml20">
+					<div class="top1 mt10">
+						<div class="left1 fl">{{.SubTitle}}</div>
+						<div class="right1 fr">{{.ShopPrice}}</div>
+						<div class="clear"></div>
+					</div>
+					<div class="bot mt20 ft20 ftbc">总计：{{.ShopPrice}}元</div>
+				</div>
+
+				<input type="text" name="goodsId" value="{{.Id}}" hidden>
+				<input type="text" name="goodsPrice" value="{{.ShopPrice}}" hidden>
+				<input type="text" name="goodsTitle" value="{{.Title}}" hidden>
+				<input type="text" name="goodsVersion" value="{{.GoodsVersion}}" hidden>
+				<input type="text" name="goodsGift" value="{{.GoodsGift}}" hidden>
+				<input type="text" name="goodsFitting" value="{{.GoodsFitting}}" hidden>
+				<input type="text" id="GoodsColor" name="goodsColor" value="{{$.tempColorName}}" hidden>
+				<input type="text" name="goodsImage" value="{{.GoodsImage}}" hidden>
+				<input type="text" name="goodsAttr" value="{{.GoodsAttrs}}" hidden>
+				{{end}}
+				<div class="xiadan ml20 mt20">
+					<input class="jrgwc" type="submit" name="jrgwc" value="加入购物车" />
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</form>
+	<div class="container clearfix">
+		<!-- 看了又看 -->
+		<div class="c_left">
+			<h2>看了又看</h2>
+			<div class="item">
+
+				<a target="_blank" href="#">
+
+					<img src="#" />
+
+					<p class="price recommendLookPrice4183081">￥31.90</p>
+
+					<p>三利 纯棉A类标准简约素雅大浴巾 70×140cm 男女同款 柔软舒适吸水裹身巾 豆绿</p>
+
+				</a>
+			</div>
+			<div class="item">
+				<a target="_blank" href="#">
+					<img src="#" />
+					<p class="price recommendLookPrice4183081">￥31.90</p>
+					<p>三利 纯棉A类标准简约素雅大浴巾 70×140cm 男女同款 柔软舒适吸水裹身巾 豆绿</p>
+				</a>
+			</div>
+		</div>
+
+		<div class="c_right">
+			<ul class="detail_list clearfix">
+				<li class="">详情描述</li>
+				<li class="">规格参数</li>
+				<li class="">用户评价</li>
+			</ul>
+
+
+			<div class="detail_info">
+				<div class="detail_info_item">
+					{{.goodsDescription}}
+				</div>
+
+				<div class="detail_info_item">
+					<ul>
+						{{range .goodsAttrs}}
+						<li class="row clearfix">
+							<div class="span5">
+								<h2>{{Markdown2Html .AttributeTitle}}</h2>
+							</div>
+							<div class="span15">
+								{{Markdown2Html .AttributeValue}}
+							</div>
+						</li>
+						{{end}}
+					</ul>
+				</div>
+
+				<div class="detail_info_item">
+					<ul class="comment_list">
+						<li>
+							<div>
+								<img src="#">
+							</div>
+							<p>这已经是第六部了，一如既往地好用。美中不足得是，尾插和数据线的链接口，用过一段时间，就会有充电接触不良的问题，希望厂家将来有改进。</p>
+
+							<p class="eval-order-info"> <span class="eval-time">2018-11-18
+									14:00:35</span><span>月岩白</span><span>6GB+64GB</span><span></span></p>
+
+						</li>
+						<li>
+							<div>
+								<img src="">
+							</div>
+							<p>这已经是第六部了，一如既往地好用。美中不足得是，尾插和数据线的链接口，用过一段时间，就会有充电接触不良的问题，希望厂家将来有改进。</p>
+
+							<p class="eval-order-info"> <span class="eval-time">2018-11-18
+									14:00:35</span><span>月岩白</span><span>6GB+64GB</span><span></span></p>
+
+						</li>
+					</ul>
+				</div>
+
+
+			</div>
+
+		</div>
+	</div>
+	<!-- footer -->
+	{{template "shop/public/publicFooter.html" .}}
+</body>
+
+</html>
+{{end}}

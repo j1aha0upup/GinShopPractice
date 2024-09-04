@@ -1,0 +1,73 @@
+{{define "admin/nav/navList.html"}}
+
+<body>
+    {{template "admin/public/publicImoport.html" .}}
+    <div class="col-sm-10">
+        <!--
+    列表展示
+-->
+        <div class="table-responsive">
+            <button><a href="/admin/navAdd">导航添加</a></button>
+            <table class="table table-bordered">
+                <thead>
+                    <tr class="th">
+                        <th>导航标题</th>
+                        <th>导航位置</th>
+                        <th>导航跳转链接</th>
+                        <th>导航排序</th>
+                        <th>新窗口打开</th>
+                        <th>导航状态</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{range .nav}}
+                    <tr>
+                        <td>{{.Title}}</td>
+                        <td>{{.Position}}</td>
+                        <td>{{.Link}}</td>
+                        <td>{{.Sort}}</td>
+                        {{if eq .IsOpennew 1}}
+                        <td>是</td>
+                        {{else}}
+                        <td>否</td>
+                        {{end}}
+                        <td>
+                            {{if eq .Status 1}}
+                            <button><img src="/static/images/yes.gif" alt="status OK" class="changeStatusButton"
+                                    data-id="{{.Id}}" data-table_name="nav" data-status_value="{{.Status}}"></button>
+                            {{else}}
+                            <button><img src="/static/images/no.gif" alt="status NO" class="changeStatusButton"
+                                    data-id="{{.Id}}" data-table_name="nav" data-status_value="{{.Status}}"></button>
+                            {{end}}
+                        </td>
+                        <td class="text-center">
+                            <a href="/admin/navEdit?navId={{.Id}}&pageNumber={{$.pagination.CurrentPage}}">
+                                修改</a>
+                            <a class="deleteConfirm" title="{{.Title}}"
+                                href="/admin/navDelete?navId={{.Id}}&pageNumber={{$.pagination.CurrentPage}}">删除</a>
+                        </td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            </table>
+            <div class="pagination" id="pagination"></div>
+        </div>
+    </div>
+</body>
+<script src="/static/js/jq-paginator.js"></script>
+
+<script>
+    $('#pagination').jqPaginator({
+        totalPages: {{.pagination.TotalPages }},
+        visiblePages: {{.pagination.VisiblePages }},
+        currentPage: {{.pagination.CurrentPage }},
+        onPageChange: function (num, type) {
+            if (type != 'init') {
+                location.href = "/admin/navList?pageNumber=" + num;
+            }
+        },
+    })
+</script>
+
+{{end}}

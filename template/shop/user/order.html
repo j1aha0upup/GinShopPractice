@@ -1,0 +1,135 @@
+{{ define "shop/user/order.html" }}
+{{ template "shop/public/publicHeader.html" .}}
+
+<script src="/static/js/jq-Paginator.js"></script>
+<link rel="stylesheet" href="/static/shop/css/order.css" />
+
+<!-- self_info -->
+<div class="grzxbj">
+	<div class="selfinfo center">
+		<div class="lfnav fl">
+			<div class="ddzx">用户中心</div>
+			<div class="subddzx">
+				{{ template "shop/user/userLeft.html" .}}
+			</div>
+
+		</div>
+		<div class="rtcont fr">
+			<h1>我的订单</h1>
+			<div class="uc-content-box">
+				<div class="box-hd">
+					<div class="more clearfix">
+						<ul class="filter-list J_orderType">
+							<li class="first active"><a href="/user/order">全部订单</a></li>
+							<li><a href="/user/order?orderStatus=0">待支付</a></li>
+							<li><a href="/user/order?orderStatus=1">已支付</a></li>
+							<li><a href="/user/order?orderStatus=3">待收货</a></li>
+							<li><a href="/user/order?orderStatus=6">已关闭</a></li>
+						</ul>
+						<form id="J_orderSearchForm" class="search-form clearfix" action="/user/order" method="get">
+
+							<input class="search-text" type="search" id="J_orderSearchKeywords" name="searchValue"
+								autocomplete="off" placeholder="输入商品名称" value="{{.searchValue}}">
+							<input type="submit" class="search-btn iconfont" value="搜索">
+						</form>
+					</div>
+				</div>
+				<div class="box-bd">
+
+					{{if .order}}
+					<table class="table">
+						{{range .orderList}}
+						<tr>
+							<td colspan="2">
+								<div class="order-summary">
+
+									<h2>
+										{{if eq .OrderStatus 0}}
+										已下单 未支付
+										{{else if eq .OrderStatus 1}}
+										已付款
+										{{else if eq .OrderStatus 2}}
+										已配货
+										{{else if eq .OrderStatus 3}}
+										已发货
+										{{else if eq .OrderStatus 4}}
+										交易成功
+										{{else if eq .OrderStatus 5}}
+										已退货
+										{{else if eq .OrderStatus 6}}
+										无效 已取消
+										{{end}}
+									</h2>
+									{{Unix2Time .AddTime}} | {{.Name}} | 订单号：{{.OrderSn}} | 在线支付
+									实付金额：{{.TotalPrice}} 元
+
+								</div>
+								{{range .OrderItem}}
+								<div class="order-info clearfix">
+									<div class="col_pic">
+										<img src="/{{.GoodsImage}}" />
+									</div>
+									<div class="col_title">
+										<p>{{.GoodsTitle}}</p>
+										<p>{{.GoodsPrice}}元 × {{.GoodsNum}}</p>
+										<p>合计：{{GoodsPriceMulGoodsNum .GoodsPrice .GoodsNum}}元</p>
+									</div>
+								</div>
+								{{end}}
+
+							</td>
+
+							<td>
+								{{if eq .PayStatus 1}}
+								<span>
+									<a class="btn" href="/user/orderinfo?orderId={{.Id}}">订单详情</a>
+									<br>
+									<br>
+									<a class="btn" href="#">申请售后</a>
+								</span>
+								{{else}}
+								<span>
+									<a class="delete btn btn-primary" href="#">去支付</a>
+									<br>
+									<br>
+									<a class="btn" href="/user/orderinfo?orderId={{.Id}}">订单详情</a>
+								</span>
+								{{end}}
+							</td>
+						</tr>
+						{{end}}
+
+					</table>
+
+					<div id="page" class="pagination fr"></div>
+					{{else}}
+					<p style="text-align:center; padding-top:100px;">没有查找到订单</p>
+					{{end}}
+				</div>
+			</div>
+
+			<script>
+				$('#page').jqPaginator({
+					totalPages: {{.page.TotalPages }},
+					visiblePages: {{.page.VisiblePages }},
+					currentPage: {{.page.CurrentPage }},
+					onPageChange: function (num, type) {
+						if (type == 'change') {
+							location.href = "/user/order?currentPage=" + num + "&orderStatus={{.orderStatus}}&searchValue={{.searchValue}}";
+						}
+					}
+				})
+			</script>
+
+		</div>
+		<div class="clear"></div>
+	</div>
+</div>
+<!-- self_info -->
+
+{{ template "shop/public/publicFooter.html" .}}
+</body>
+
+</html>
+
+{{end}}

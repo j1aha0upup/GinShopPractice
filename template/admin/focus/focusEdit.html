@@ -1,0 +1,44 @@
+{{define "admin/focus/focusEdit.html"}}
+{{template "admin/public/publicImoport.html" .}}
+<div class="col-sm-10">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            修改角色信息
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive input-form">
+                <form action="/admin/doFocusEdit" method="post" enctype="multipart/form-data">
+                    <ul>
+                        {{with .focus}}
+                        <input type="text" name="focus_id" value="{{.Id}}" hidden /></li>
+                        <li> 轮播图标题: <input type="text" name="focus_title" value="{{.Title}}" /></li>
+                        <li> 轮播图类型:
+                            <select name="focus_type">
+                                <option value="1" {{if eq .Type 1}}selected{{end}}>网页端轮播图</option>
+                                <option value="2" {{if eq .Type 2}}selected{{end}}>小程序端轮播图</option>
+                                <option value="3" {{if eq .Type 3}}selected{{end}}>APP端轮播图</option>
+                            </select>
+                        </li>
+                        <li> 轮播图: <input type="file" name="focus_img" />(空为不修改轮播图)</li>
+                        <li> 轮播图排序: <input type="text" name="focus_sort" value="{{.Sort}}" /></li>
+                        <li> 轮播图跳转链接: <input type="text" name="focus_link" value="{{.Link}}" /></li>
+                        {{end}}
+
+                        <li>
+                            <br />
+                            <button type="submit" class="btn btn-default">提交</button>
+                        </li>
+
+                    </ul>
+
+
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+{{end}}

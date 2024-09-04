@@ -1,0 +1,35 @@
+{{define "admin/admin_user/auth.html"}}
+<div class="col-sm-10">
+    <table class="table table-bordered">
+
+        <form action="doAuth" method="post">
+            <input name="role_id" value="{{.role_id}}" hidden>
+            {{range .accessList}}
+            <tr>
+                <td style="background: #D8E2FA; padding-right: 10px; width: 150px;">
+                    <label>
+
+                        <input type="checkbox" class="module_cbo" value="{{.Id}}" name="module_id" {{if
+                            .IsChecked}}checked{{end}}>&nbsp;&nbsp;
+
+                        {{.ModuleName}}
+                    </label>
+                </td>
+                <td>
+                    &nbsp;&nbsp;
+                    {{range .AccessList}}
+                    <label>
+                        <input type="checkbox" class="action_cbo" value="{{.Id}}" name="module_id" {{if
+                            .IsChecked}}checked{{end}}>
+                        &nbsp;&nbsp;{{.ModuleName}} </label>&nbsp;&nbsp;
+                    {{end}}
+
+                </td>
+            </tr>
+            {{end}}
+            <input type="submit">
+        </form>
+
+    </table>
+</div>
+{{end}}

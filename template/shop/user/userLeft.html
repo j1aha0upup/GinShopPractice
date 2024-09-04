@@ -1,0 +1,10 @@
+{{ define "shop/user/userLeft.html" }}
+<ul>
+    <li {{if eq .pathname "/usercenter" }}style="background-color:red" {{end}}><a href="/usercenter">欢迎页面</a></li>
+    <li {{if eq .pathname "/user/order" }}style="background-color:red" {{end}} {{if eq .pathname "/user/orderinfo"
+        }}style="background-color:red" {{end}}><a href="/user/order">我的订单</a></li>
+    <li><a href="#">用户信息</a></li>
+    <li><a href="#">我的收藏</a></li>
+    <li><a href="#">我的评论</a></li>
+</ul>
+{{end}}

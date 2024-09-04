@@ -1,0 +1,63 @@
+{{define "admin/goodsTypeAttribute/goodsTypeAttributeList.html"}}
+
+<body>
+    {{template "admin/public/publicImoport.html" .}}
+    <div class="col-sm-10">
+        <!--
+    列表展示
+-->
+        <div class="table-responsive">
+            <button><a href="/admin/goodsTypeAttributeAdd?goodsTypeId={{.goodsTypeId}}">属性添加</a></button>
+            <table class="table table-bordered">
+                <thead>
+                    <tr class="th">
+                        <th>属性名称</th>
+                        <th>添加方式</th>
+                        <th>可选值</th>
+                        <th>属性排序</th>
+                        <th>属性增加时间</th>
+                        <th>属性状态</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{range .goodsTypeAttribute}}
+                    <tr>
+                        <td>{{.Title}}</td>
+                        <td>
+                            {{if eq .AttributeType 1}}
+                            单行文本框
+                            {{else if eq .AttributeType 2}}
+                            多行文本框
+                            {{else}}
+                            下拉选择列表
+                            {{end}}
+                        </td>
+                        <td>{{.AttributeValue}}</td>
+                        <td>{{.Sort}}</td>
+                        <td>{{Unix2Time .AddTime}}</td>
+                        <td>
+                            {{if eq .Status 1}}
+                            <button><img src="/static/images/yes.gif" alt="status OK" class="changeStatusButton"
+                                    data-id="{{.Id}}" data-table_name="goods_type_attribute"
+                                    data-status_value="{{.Status}}"></button>
+                            {{else}}
+                            <button><img src="/static/images/no.gif" alt="status NO" class="changeStatusButton"
+                                    data-id="{{.Id}}" data-table_name="goods_type_attribute"
+                                    data-status_value="{{.Status}}"></button>
+                            {{end}}
+                        </td>
+                        <td class="text-center">
+                            <a href="/admin/goodsTypeAttributeEdit?goodsTypeAttributeId={{.Id}}">
+                                修改</a>
+                            <a class="deleteConfirm" title="{{.Title}}"
+                                href="/admin/goodsTypeAttributeDelete?goodsTypeAttributeId={{.Id}}">删除</a>
+                        </td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+{{end}}

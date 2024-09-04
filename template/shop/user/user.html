@@ -1,0 +1,64 @@
+{{ define "shop/user/user.html" }}
+{{ template "shop/public/publicHeader.html" .}}
+<link rel="stylesheet" href="/static/shop/css/welcome.css" />
+<!-- self_info -->
+<div class="grzxbj">
+    <div class="selfinfo center">
+        <div class="lfnav fl">
+            <div class="ddzx">用户中心</div>
+            <div class="subddzx">
+                {{ template "shop/user/userLeft.html" .}}
+            </div>
+        </div>
+        <div class="rtcont fr">
+            <div class="portal-content-box">
+                <div class="box-bd">
+                    <div class="portal-main clearfix">
+                        <div class="user-card">
+                            <h2 class="username">{{.user.UserName}}</h2>
+                            <p class="tip">您好</p>
+                            <a class="link" href="https://account.xiaomi.com/pass/userInfo" target="_blank"
+                                data-stat-id="30d619c492c43471"
+                                onclick="_msq.push(['trackEvent', 'f4f3444fdfa3d27a-30d619c492c43471', 'https://account.xiaomi.com/pass/userInfo', 'pcpid', '']);">修改个人信息
+                                &gt;</a>
+                            <img class="avatar" src="https://account.xiaomi.com/static/img/passport/photo.jpg"
+                                width="150" height="150" alt="2152135723">
+                        </div>
+                        <div class="user-actions">
+                            <ul class="action-list">
+                                <li>账户安全：<span class="level level-2">普通</span></li>
+                                <li>绑定手机：<span class="tel">{{.user.Phone}}</span></li>
+
+                                <li>绑定邮箱：example@example.com</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="portal-sub">
+                        <ul class="info-list clearfix">
+                            <li>
+                                <h3>待支付的订单：<span class="num">{{.waitPay}}</span></h3>
+                                <a href="/user/order?orderStatus=0"><img src="//s01.mifile.cn/i/user/portal-icon-1.png"
+                                        alt=""></a>
+
+                            </li>
+                            <li>
+                                <h3>待收货的订单：<span class="num">{{.waitAccept}}</span></h3>
+                                <a href="/user/order?orderStatus=3"><img src="//s01.mifile.cn/i/user/portal-icon-1.png"
+                                        alt=""></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<!-- self_info -->
+
+{{ template "shop/public/publicFooter.html" .}}
+</body>
+
+</html>
+{{end}}

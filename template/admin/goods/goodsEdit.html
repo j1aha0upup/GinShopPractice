@@ -1,0 +1,239 @@
+{{define "admin/goods/goodsEdit.html"}}
+{{template "admin/public/publicImoport.html" .}}
+<link rel="stylesheet" href="/static/wysiwyg-editor-master/css/froala_editor.pkgd.min.css">
+<script type="text/javascript" src="/static/wysiwyg-editor-master/js/froala_editor.pkgd.min.js"></script>
+<script type="text/javascript" src="/static/wysiwyg-editor-master/js/languages/zh_cn.js"></script>
+
+<script type="text/javascript" src="/static/jqueryDiyUpload/diyUpload/js/diyUpload.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/jqueryDiyUpload/diyUpload/css/webuploader.css">
+<link rel="stylesheet" type="text/css" href="/static/jqueryDiyUpload/diyUpload/css/diyUpload.css">
+<script type="text/javascript" src="/static/jqueryDiyUpload/diyUpload/js/webuploader.html5only.min.js"></script>
+<script type="text/javascript" src="/static/jqueryDiyUpload/diyUpload/js/diyUpload.js"></script>
+<style>
+    .goodsImage {
+        position: relative;
+        display: inline-block;
+    }
+
+    .goodsImageDelete {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 1;
+        opacity: 0;
+    }
+
+    .goodsImage:hover .goodsImageDelete {
+        opacity: 1
+    }
+</style>
+<div class="col-sm-10">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            修改商品信息
+        </div>
+        <div class="panel-body">
+            <div class="panel-body">
+                <div class="table-responsive input-form">
+                    <form action="/admin/doGoodsEdit" method="post" enctype="multipart/form-data">
+                        <input type="submit" value="提交">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item active" role="tablist">
+                                <a class="nav-link active" role="tab" href="#base-info" data-toggle="tab"
+                                    aria-expanded="true">基本信息</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" role="tab" href="#detail" data-toggle="tab">商品详情</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" role="tab" href="#type" data-toggle="tab">商品属性</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" role="tab" href="#picture" data-toggle="tab">商品相册</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="base-info">
+                                {{with .goods}}
+                                <input type="text" name="goodsId" value="{{.Id}}" hidden />
+                                <li> 商品标题: <input type="text" name="goodsTitle" value="{{.Title}}" /></li>
+                                <li> 商品子标题: <input type="text" name="goodsSubTitle" value="{{.SubTitle}}" /></li>
+                                <li> 商品编号: <input type=" text" name="goodsSn" value="{{.GoodsSn}}" /></li>
+                                <li> 商品分类:
+                                    <select name="goodsCateId">
+                                        {{range $.goodsCate}}
+                                        <option value="{{.Id}}" {{if eq $.goods.CateId .Id}}selected{{end}}>{{.Title}}
+                                        </option>
+                                        {{end}}
+                                    </select>
+                                </li>
+                                <li> 商品图片: <input type="file" name="goodsImage" /></li>
+                                <li> 现价: <input type="text" name="goodsShopPrice" value="{{.ShopPrice}}" /></li>
+                                <li> 原价: <input type="text" name="goodsMarketPrice" value="{{.MarketPrice}}" /></li>
+                                <li> 关键词: <input type="text" name="goodsKeywords" value="{{.GoodsKeywords}}" /></li>
+                                <li> 关联商品: <input type="text" name="goodsRelation" value="{{.GoodsRelation}}" /></li>
+                                <li> 配件: <input type="text" name="goodsFitting" value="{{.GoodsFitting}}" /></li>
+                                <li> 礼品: <input type="text" name="goodsGift" value="{{.GoodsGift}}" /></li>
+                                <li> 版本: <input type="text" name="goodsVersion" value="{{.GoodsVersion}}" /></li>
+                                <li> 更多选择: <input type="text" name="goodsMoreChoice" value="{{.MoreChoice}}" />
+                                </li>
+                                <li> 排序: <input type="text" name="goodsSort" value="{{.Sort}}" /></li>
+                                <li> 商品颜色:
+                                    {{range $.goodsColor}}
+                                    <input type="checkbox" name="goodsColor" value="{{.Id}}" {{if IsColorInGoods
+                                        $.goods.GoodsColor .Id}} checked {{end}} />{{.ColorName}}&nbsp;
+                                    {{end}}
+                                </li>
+                                <li>
+                                    <input type="checkbox" name="goodsIsNew" {{if eq .IsNew 1}}checked
+                                        {{end}} />新品&nbsp;
+                                    <input type="checkbox" name="goodsIsHot" {{if eq .IsHot 1}}checked
+                                        {{end}} />火热&nbsp;
+                                    <input type="checkbox" name="goodsIsBest" {{if eq .IsBest 1}}checked
+                                        {{end}} />爆款&nbsp;
+                                </li>
+                                <li> 状态: <input type="radio" name="goodsStatus" value="1" {{if eq .Status
+                                        1}}checked{{end}} />显示&nbsp;<input type="radio" name="goodsStatus" value="0"
+                                        {{if eq .Status 0}}checked{{end}} />不显示&nbsp;</li>
+                            </div>
+
+                            <div class="tab-pane" id="detail">
+                                <li> 商品描述: <textarea id="goodsDescription"
+                                        name="goodsDescription">{{.GoodsDescription}}</textarea></li>
+                            </div>
+                            <div class="tab-pane" id="type">
+                                商品类型:
+                                <select id="goodsTypeId" name="goodsTypeId">
+                                    {{range $.goodsType}}
+                                    <option value="{{.Id}}" {{if eq .Id $.GoodsTypeId}}selected{{end}}>{{.Title}}
+                                    </option>
+                                    {{end}}
+                                </select>
+
+                                <div id="goodsTypeAttribute" name="goodsTypeAttribute">
+                                    {{range $.goodsAttribute}}
+                                    {{if eq .AttributeType 1}}
+                                    <li>
+                                        {{.AttributeTitle}}: <input type="text" name="goodsAttributeId{{.AttributeId}}"
+                                            value="{{.AttributeValue}}" />
+                                    </li>
+                                    {{else if eq .AttributeType 2}}
+                                    <li>
+                                        {{.AttributeTitle}}: <textarea
+                                            name="goodsAttributeId{{.AttributeId}}">{{.AttributeValue}}</textarea>
+                                    </li>
+                                    {{else if eq .AttributeType 3}}
+                                    <li>
+                                        {{.AttributeTitle}}
+                                        <select name="goodsAttributeId{{.AttributeId}}">
+                                            {{$AttributeValue:=.AttributeValue}}
+                                            {{range $i,$v := AttributeOptionList .AttributeId}}
+                                            <option value="{{$v}}" {{if eq $AttributeValue $v}}selected{{end}}>
+                                                {{$v}}
+                                            </option>
+                                            {{end}}
+                                        </select>
+                                    </li>
+                                    {{end}}
+                                    {{end}}
+                                </div>
+                            </div>
+                            {{end}}
+                            <div class="tab-pane" id="picture">
+                                <div id="goodsImageList">
+                                    {{range .goodsImages}}
+                                    <div class="goodsImage">
+                                        <img src="/{{.ImageUrl}}" style="width: 170px;height: 150px;" />
+                                        <img class="goodsImageDelete" src="/static/images/x_alt.png"
+                                            data-goodsId="{{$.goods.Id}}" data-goodsImageId="{{.Id}}" />
+                                        <br />
+                                        {{$selectedColorId:=.ColorId}}
+                                        <select class="goodsImageBindColor" data-goodsImageId="{{.Id}}">
+                                            <option value="0" {{if eq .ColorId 0}}selected{{end}}>
+                                                关联颜色</option>
+                                            {{range $.goodsColorList}}
+                                            <option value="{{.Id}}" {{if eq $selectedColorId .Id}}selected{{end}}>
+                                                {{.ColorName}}
+                                            </option>
+                                            {{end}}
+                                        </select>
+                                    </div>
+                                    {{end}}
+                                </div>
+
+                                <div id="goodsImagesUpload" name="goodsImages"></div>
+                            </div>
+
+                            <input type="hidden" name="pageNumber" value="{{.pageNumber}}">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $('#goodsImagesUpload').diyUpload({
+            url: '/admin/goodsImagesUpload',
+            success: function (data) {
+                var result = "<input name=\"goodsImageList\" value=\"" + data["imageSrc"] + "\"" + " hidden/>"
+                $('#goodsImageList').append(result)
+            },
+            error: function (err) {
+                console.info(err)
+            }
+        })
+
+        new FroalaEditor('#goodsDescription', {
+            language: 'zh_cn',
+            imageUploadURL: '/admin/goodsDescriptionImagesUpload',
+            // imageManagerDeleteURL: '/admin/goodsDescriptionImagesDelete',
+            // imageManagerDeleteParams: { user_id: 4219762 },
+            // imageManagerDeleteMethod: 'POST'
+        })
+
+        $("#goodsTypeId").change(function () {
+            $.get("/admin/getGoodsTypeAttribute", { goodsTypeId: $(this).val() },
+                function (data) {
+                    finallyResult = ""
+                    for (var i = 0; i < data.length; i++) {
+                        var result = "<li>"
+                        if (data[i]["AttributeType"] == 1) {
+                            result += data[i]["Title"] + "：<input type=\"text\" name=\"goodsAttributeId" + data[i]["Id"] + "\" /></li>"
+                        } else if (data[i]["AttributeType"] == 2) {
+                            result += data[i]["Title"] + "：<textarea name=\"goodsAttributeId" + data[i]["Id"] + "\"></textarea ></li>"
+                        } else {
+                            result += data[i]["Title"] + "：<select name=\"goodsAttributeId" + data[i]["Id"] + "\">"
+                            var arr = data[i]["AttributeValue"].split("\n")
+                            for (var j = 0; j < arr.length; j++) {
+                                result += "\n<option value=\"" + arr[j] + "\"" + ">" + arr[j] + "</option>"
+                            }
+
+                        }
+                        result += "</select></li>"
+                        finallyResult += result
+                    }
+                    $("#goodsTypeAttribute").html(finallyResult)
+                })
+        })
+
+        $(".goodsImageDelete").click(function () {
+            if (confirm("确认要删除商品的这张图片吗")) {
+                var toDelete = $(this).parent()
+                $.get("/admin/goodsImageDelete", { goodsId: $(this).attr("data-goodsId"), goodsImageId: $(this).attr("data-goodsImageId") },
+                    function (data) {
+                        if (data["success"]) {
+                            toDelete.remove()
+                        }
+                    })
+            }
+        })
+
+        $(".goodsImageBindColor").change(function () {
+            $.get("/admin/goodsColorBindImages",
+                { goodsImageId: $(this).attr("data-goodsImageId"), goodsColorId: $(this).val() },
+                function (data) {
+                })
+        })
+    </script>
+</div>
+{{end}}

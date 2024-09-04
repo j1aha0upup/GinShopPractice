@@ -1,0 +1,81 @@
+{{ define "shop/public/publicMiddle.html" }}
+<!-- start banner_x -->
+<div class="banner_x center">
+    <a href="/index" target="_blank">
+        <div class="logo fl"></div>
+    </a>
+
+    <div class="nav fl">
+        <ul class="clearfix" id="nav_list">
+            <li class="allCategoryList">
+                <a>全部分类列表</a>
+                <div class="banner_y">
+                    <div class="nav">
+                        <ul>
+                            {{range .goodsCate}}
+                            <li>
+                                <!-- <a href="{{.Link}}" target="_blank">{{.Title}}</a> -->
+                                <a href="category{{.Id}}" target="_blank">{{.Title}}</a>
+                                <div class="pop">
+                                    <ol class="cate_list clear">
+                                        {{range .GoodsCateList}}
+                                        <li>
+                                            <div class="xuangou_left">
+                                                <!-- <a href="{{.Link}}" target="_blank" class="clearfix">
+                                                <div class="img fl"><img src="/{{.CateImage}}" alt="{{.Title}}">
+                                                </div>
+                                                <span class="fl">{{.Title}}</span>
+                                            </a> -->
+                                                <a href="category{{.Id}}" target="_blank" class="clearfix">
+                                                    <div class="img fl"><img src="/{{.CateImage}}" alt="{{.Title}}">
+                                                    </div>
+                                                    <span class="fl">{{.Title}}</span>
+                                                </a>
+                                            </div>
+                                        </li>
+                                        {{end}}
+                                    </ol>
+                                </div>
+                            </li>
+                            {{end}}
+                        </ul>
+                    </div>
+                </div>
+            </li>
+
+            {{range .middleNav}}
+            <li>
+                <a href="{{.Link}}">{{.Title}}</a>
+                {{$tempLen := len .RelationGoodsList}}
+                {{if ne $tempLen 0}}
+                <ol class="children-list clearfix">
+                    {{range .RelationGoodsList}}
+                    <li>
+                        <a href="/detail?goodsId={{.Id}}">
+                            <img src="/{{.GoodsImage}}" />
+                            <p>{{.Title}}</p>
+                        </a>
+                    </li>
+                    {{end}}
+                </ol>
+                {{end}}
+            </li>
+            {{end}}
+        </ul>
+    </div>
+    <!-- 搜索商品 -->
+    <div class="search fr">
+        <form action="" method="post">
+            <div class="text fl">
+                <input type="text" class="shuru" placeholder="搜索商品">
+            </div>
+            <div class="submit fl">
+                <input type="submit" class="sousuo" value="搜索" />
+            </div>
+            <div class="clear"></div>
+        </form>
+        <div class="clear"></div>
+    </div>
+</div>
+<!-- end banner_x -->
+{{end}}

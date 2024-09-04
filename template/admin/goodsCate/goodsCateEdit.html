@@ -1,0 +1,54 @@
+{{define "admin/goodsCate/goodsCateEdit.html"}}
+{{template "admin/public/publicImoport.html" .}}
+<div class="col-sm-10">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            修改商品分类信息
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive input-form">
+                <form action="/admin/doGoodsCateEdit" method="post" enctype="multipart/form-data">
+                    <ul>
+                        {{with .goodsCate}}
+                        <input type="text" name="goodsCateId" value="{{.Id}}" hidden /></li>
+                        <li> 商品分类标题: <input type="text" name="goodsCateTitle" value="{{.Title}}" /></li>
+                        <li> 商品分类子标题: <input type="text" name="goodsCateSubTitle" value="{{.SubTitle}}" /></li>
+                        <li> 商品分类关键字: <input type="text" name="goodsCateKeywords" value="{{.Keywords}}" /></li>
+                        <li> 分类链接：<input type="text" name="goodsCateLink" value="{{.Link}}" /></li>
+                        </li>
+                        <li> 分类图片: <input type="file" name="goodsCateImage" value="" /></li>
+                        <li> 商品分类描述: <input type="text" name="goodsCateDescription" value="{{.Description}}" /></li>
+                        <li> 商品分类排序: <input type="text" name="goodsCateSort" value="{{.Sort}}" /></li>
+
+                        <li> 分类状态: <input type="radio" name="goodsCateStatus" value="1" {{if eq .Status
+                                1}}checked{{end}} />显示&nbsp;&nbsp;<input type="radio" name="goodsCateStatus" value="0"
+                                {{if eq .Status 0}}checked{{end}} />不显示</li>
+                        <li> 所属分类:
+                            <select name="goodsCatePid">
+                                <option value="0" {{if eq .Pid 0}}selected{{end}}>顶级分类</option>
+
+                                {{range $.goodsCateList}}
+                                <option value="{{.Id}}" {{ if eq $.goodsCate.Pid .Id}}selected{{end}}>{{.Title}}
+                                </option>
+                                {{end}}
+                            </select>
+                        </li>
+                        {{end}}
+
+                        <li>
+                            <br />
+                            <button type="submit" class="btn btn-default">提交</button>
+                        </li>
+                    </ul>
+
+
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+{{end}}

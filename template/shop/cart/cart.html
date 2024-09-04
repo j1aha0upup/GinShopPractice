@@ -1,0 +1,167 @@
+{{define "shop/cart/cart.html"}}
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="author" content="order by dede58.com" />
+	<title>我的购物车</title>
+	<link rel="stylesheet" type="text/css" href="/static/shop/css/style.css">
+	<link rel="stylesheet" href="/static/shop/css/swiper.min.css">
+</head>
+
+<body>
+	<!-- start header -->
+	<!--end header -->
+	<!-- start banner_x -->
+	<div class="banner_x center">
+		<a href="/index" target="_blank">
+			<div class="logo fl"></div>
+		</a>
+		<div class="wdgwc fl ml40">我的购物车</div>
+		<div class="wxts fl ml20">温馨提示：产品是否购买成功，以最终下单为准哦，请尽快结算</div>
+		<div class="dlzc fr">
+			{{if .isLogin}}
+			<ul>
+				<li><a href="/usercenter?userid={{.user.Id}}">{{.user.UserName}},您好</a></li>
+			</ul>
+			{{else}}
+			<ul>
+				<li><a href="/login" target="_blank">登录</a></li>
+				<li>|</li>
+				<li><a href="/register" target="_blank">注册</a></li>
+			</ul>
+			{{end}}
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="xiantiao"></div>
+	<div class="gwcxqbj">
+		<div class="gwcxd center">
+			<div class="top2 center">
+				<div class="sub_top fl">
+					<input type="checkbox" id="checkAll" />全选
+				</div>
+				<div class="sub_top fl">商品名称</div>
+				<div class="sub_top fl">单价</div>
+				<div class="sub_top fl">数量</div>
+				<div class="sub_top fl">小计</div>
+				<div class="sub_top fr">操作</div>
+				<div class="clear"></div>
+			</div>
+
+			{{range .cart}}
+			<div class="content2 center">
+				<div class="sub_content fl cart_list">
+					<input class="checkOne" type="checkbox" goods_id="{{.GoodsId}}" goods_color="{{.GoodsColor}}" {{if
+						eq .Checked true}} checked {{end}} />
+				</div>
+				<div class="sub_content fl"><img src="/{{.GoodsImage}}" width="100%" height="100%"></div>
+				<div class="sub_content fl ft20">{{.Title}}-{{.GoodsColor}}</div>
+				<div class="sub_content fl ">{{.Price}}元</div>
+				<div class="sub_content fl">
+					<input class="shuliang" type="number" value="{{.Num}}" step="1" min="1" readonly>
+				</div>
+				<div class="sub_content fl" class="totalPrice">{{GoodsPriceMulGoodsNum .Price .Num}}</div>
+				<div class="sub_content fl"><a class="deleteConfirm"
+						href="/cartDeleteGoods?goodsId={{.GoodsId}}&colorName={{.GoodsColor}}">×</a></div>
+				<div class="clear"></div>
+			</div>
+			{{end}}
+		</div>
+		<div class="jiesuandan mt20 center">
+			<div class="tishi fl ml20">
+				<ul>
+					<li><a href="/index">继续购物</a></li>
+					<li>|</li>
+					<li>共<span>{{.cartLen}}</span>件商品，已选择<span id="goodsCheckedLen">{{.goodsCheckedLen}}</span>件</li>
+					<div class="clear"></div>
+				</ul>
+			</div>
+			<div class="jiesuan fr">
+				<div class="jiesuanjiage fl">合计（不含运费）：<span id="totalPrice">{{.totalPrice}}</span></div>
+				<div class="jsanniu fr">
+					<form action="/cart/checkout">
+						<input class="jsan" type="submit" />
+					</form>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+	<!-- footer -->
+	{{template "shop/public/publicFooter.html" .}}
+</body>
+
+<script type="text/javascript" src="/static/bootstrap/js/jquery-1.10.1.js"></script>
+<script>
+	$('.deleteConfirm').click(function () {
+		return confirm("确认删除" + this.title + "吗？")
+	})
+
+	$("#checkAll").click(function () {
+		if (this.checked) {
+			$(":checkbox").prop("checked", true);
+			//让cookie中商品的checked属性都等于true                
+			$.get('/cart/changeAllCart?flag=1', function (response) {
+				if (response.success) {
+					$("#totalPrice").html(response.totalPrice + "元")
+					$("#goodsCheckedLen").html(response.goodsCheckedLen)
+				}
+			})
+		} else {
+			$(":checkbox").prop("checked", false);
+			//让cookie中商品的checked属性都等于false
+			$.get('/cart/changeAllCart?flag=0', function (response) {
+				if (response.success) {
+					$("#totalPrice").html(response.totalPrice + "元")
+					$("#goodsCheckedLen").html(response.goodsCheckedLen)
+				}
+			})
+		}
+	})
+
+	$(".checkOne").click(function () {
+		var goodsId = $(this).attr("goods_id")
+		var goodsColor = $(this).attr("goods_color")
+
+		if (this.checked) {
+			$.get('/cart/changeOneChecked?flag=1&goodsId=' + goodsId + "&goodsColor=" + goodsColor, function (response) {
+				if (response.success) {
+					$("#totalPrice").html(response.totalPrice + "元")
+					$("#goodsCheckedLen").html(response.goodsCheckedLen)
+				}
+			})
+		} else {
+			$.get('/cart/changeOneChecked?flag=0&goodsId=' + goodsId + "&goodsColor=" + goodsColor, function (response) {
+				if (response.success) {
+					$("#totalPrice").html(response.totalPrice + "元")
+					$("#goodsCheckedLen").html(response.goodsCheckedLen)
+				}
+			})
+		}
+
+		isAllChecked()
+	})
+
+	$(document).ready(isAllChecked())
+
+	function isAllChecked() {
+		var allNum = $(".cart_list :checkbox").size();//checkbox总个数
+		var checkedNum = 0;
+		$(".cart_list :checkbox").each(function () {
+			if ($(this).prop("checked") == true) {
+				checkedNum++;
+			}
+		})
+		if (allNum == checkedNum) {//全选
+			$("#checkAll").prop("checked", true);
+		} else {//不全选
+			$("#checkAll").prop("checked", false);
+		}
+	}
+</script>
+
+</html>
+{{end}}

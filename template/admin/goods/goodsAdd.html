@@ -1,0 +1,168 @@
+{{define "admin/goods/goodsAdd.html"}}
+{{template "admin/public/publicImoport.html" .}}
+<link rel="stylesheet" href="/static/wysiwyg-editor-master/css/froala_editor.pkgd.min.css">
+<script type="text/javascript" src="/static/wysiwyg-editor-master/js/froala_editor.pkgd.min.js"></script>
+<script type="text/javascript" src="/static/wysiwyg-editor-master/js/languages/zh_cn.js"></script>
+<script type="text/javascript" src="/static/jqueryDiyUpload/diyUpload/js/diyUpload.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/static/jqueryDiyUpload/diyUpload/css/webuploader.css">
+<link rel="stylesheet" type="text/css" href="/static/jqueryDiyUpload/diyUpload/css/diyUpload.css">
+<script type="text/javascript" src="/static/jqueryDiyUpload/diyUpload/js/webuploader.html5only.min.js"></script>
+<script type="text/javascript" src="/static/jqueryDiyUpload/diyUpload/js/diyUpload.js"></script>
+<div class="col-sm-10">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            增加商品
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive input-form">
+                <form action="/admin/doGoodsAdd" method="post" enctype="multipart/form-data">
+                    <input type="submit" value="提交">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item active" role="tablist">
+                            <a class="nav-link active" role="tab" href="#base-info" data-toggle="tab"
+                                aria-expanded="true">基本信息</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" role="tab" href="#detail" data-toggle="tab">商品详情</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" role="tab" href="#color" data-toggle="tab">商品属性</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" role="tab" href="#picture" data-toggle="tab">商品相册</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="base-info">
+                            <li> 商品标题: <input type="text" name="goodsTitle" /></li>
+                            <li> 商品子标题: <input type="text" name="goodsSubTitle" /></li>
+                            <li> 商品编号: <input type="text" name="goodsSn" /></li>
+                            <li> 商品分类:
+                                <select name="goodsCateId">
+                                    {{range .goodsCate}}
+                                    <option value="{{.Id}}">{{.Title}}</option>
+                                    {{end}}
+                                </select>
+                            </li>
+                            <li> 商品图片: <input type="file" name="goodsImage" /></li>
+                            <li> 现价: <input type="text" name="goodsShopPrice" /></li>
+                            <li> 原价: <input type="text" name="goodsMarketPrice" /></li>
+                            <li> 关键词: <input type="text" name="goodsKeywords" /></li>
+                            <li> 关联商品: <input type="text" name="goodsRelation" /></li>
+                            <li> 配件: <input type="text" name="goodsFitting" /></li>
+                            <li> 礼品: <input type="text" name="goodsGift" /></li>
+                            <li> 版本: <input type="text" name="goodsVersion" /></li>
+                            <li> 更多选择: <input type="text" name="goodsMoreChoice" /></li>
+                            <li> 排序: <input type="text" name="goodsSort" /></li>
+                            <li> 商品颜色:
+                                {{range .goodsColor}}
+                                <input type="checkbox" name="goodsColor" value="{{.Id}}" />{{.ColorName}}&nbsp;
+                                {{end}}
+                            </li>
+                            <li>
+                                <input type="checkbox" name="goodsIsNew" />新品&nbsp;
+                                <input type="checkbox" name="goodsIsHot" />火热&nbsp;
+                                <input type="checkbox" name="goodsIsBest" />爆款&nbsp;
+                            </li>
+                            <li> 状态: <input type="radio" name="goodsStatus" value="1" checked />显示&nbsp;<input
+                                    type="radio" name="goodsStatus" value="0" />不显示&nbsp;</li>
+                        </div>
+
+                        <div class="tab-pane" id="detail">
+                            <li> 商品描述: <textarea id="goodsDescription" name="goodsDescription"></textarea></li>
+                        </div>
+                        <div class="tab-pane" id="color">
+                            <li> 商品类型:
+                                <select id="goodsTypeId" name="goodsTypeId">
+                                    {{range .goodsType}}
+                                    <option value="{{.Id}}">{{.Title}}</option>
+                                    {{end}}
+                                </select>
+                                <div id="goodsTypeAttribute" name="goodsTypeAttribute"></div>
+                            </li>
+
+                        </div>
+                        <div class="tab-pane" id="picture">
+                            <div id="goodsImagesUpload" name="goodsImages"></div>
+                            <div id="goodsImageList"></div>
+                        </div>
+
+                </form>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+</div>
+</div>
+<script>
+    $('#goodsImagesUpload').diyUpload({
+        url: '/admin/goodsImagesUpload',
+        success: function (data) {
+            var result = "<input name=\"goodsImageList\" value=\"" + data["imageSrc"] + "\"" + " hidden/>"
+            $('#goodsImageList').append(result)
+        },
+        error: function (err) {
+            console.info(err)
+        }
+    })
+
+    new FroalaEditor('#goodsDescription', {
+        language: 'zh_cn',
+        imageUploadURL: '/admin/goodsDescriptionImagesUpload',
+        // imageManagerDeleteURL: '/admin/goodsDescriptionImagesDelete',
+        // imageManagerDeleteParams: { user_id: 4219762 },
+        // imageManagerDeleteMethod: 'POST'
+    })
+
+    $("#goodsTypeId").change(function () {
+        $.get("/admin/getGoodsTypeAttribute", { goodsTypeId: $(this).val() },
+            function (data) {
+                finallyResult = ""
+                for (var i = 0; i < data.length; i++) {
+                    var result = "<li>"
+                    if (data[i]["AttributeType"] == 1) {
+                        result += data[i]["Title"] + "：<input type=\"text\" name=\"goodsAttributeId" + data[i]["Id"] + "\" /></li>"
+                    } else if (data[i]["AttributeType"] == 2) {
+                        result += data[i]["Title"] + "：<textarea name=\"goodsAttributeId" + data[i]["Id"] + "\"></textarea ></li>"
+                    } else {
+                        result += data[i]["Title"] + "：<select name=\"goodsAttributeId" + data[i]["Id"] + "\">"
+                        var arr = data[i]["AttributeValue"].split("\n")
+                        for (var j = 0; j < arr.length; j++) {
+                            result += "\n<option value=\"" + arr[j] + "\"" + ">" + arr[j] + "</option>"
+                        }
+
+                    }
+                    result += "</select></li>"
+                    finallyResult += result
+                }
+                $("#goodsTypeAttribute").html(finallyResult)
+            })
+    })
+    $(function () {
+        $.get("/admin/getGoodsTypeAttribute", { goodsTypeId: $("#goodsTypeId").val() },
+            function (data) {
+                finallyResult = ""
+                for (var i = 0; i < data.length; i++) {
+                    var result = "<li>"
+                    if (data[i]["AttributeType"] == 1) {
+                        result += data[i]["Title"] + "：<input type=\"text\" name=\"goodsAttributeId" + data[i]["Id"] + "\" /></li>"
+                    } else if (data[i]["AttributeType"] == 2) {
+                        result += data[i]["Title"] + "：<textarea name=\"goodsAttributeId" + data[i]["Id"] + "\"></textarea ></li>"
+                    } else {
+                        result += data[i]["Title"] + "：<select name=\"goodsAttributeId" + data[i]["Id"] + "\">"
+                        var arr = data[i]["AttributeValue"].split("\n")
+                        for (var j = 0; j < arr.length; j++) {
+                            result += "\n<option value=\"" + arr[j] + "\"" + ">" + arr[j] + "</option>"
+                        }
+                        result += "</select></li>"
+                    }
+                    finallyResult += result
+                }
+                $("#goodsTypeAttribute").html(finallyResult)
+            })
+    })
+</script>
+{{end}}

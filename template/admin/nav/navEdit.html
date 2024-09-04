@@ -1,0 +1,51 @@
+{{define "admin/nav/navEdit.html"}}
+{{template "admin/public/publicImoport.html" .}}
+<div class="col-sm-10">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            修改角色信息
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive input-form">
+                <form action="/admin/doNavEdit" method="post">
+                    <ul>
+                        {{with .nav}}
+                        <input type="text" name="navId" value="{{.Id}}" hidden /></li>
+                        <li> 导航标题: <input type="text" name="navTitle" value="{{.Title}}" /></li>
+                        <li> 导航位置:
+                            <select name="navPosition">
+                                <option value="1" {{if eq .Position 1}}selected{{end}}>顶部导航</option>
+                                <option value="2" {{if eq .Position 2}}selected{{end}}>中部导航</option>
+                                <option value="3" {{if eq .Position 3}}selected{{end}}>底部导航</option>
+                            </select>
+                        </li>
+                        <li> 导航跳转链接: <input type="text" name="navLink" value="{{.Link}}" /></li>
+                        <li> 导航排序: <input type="text" name="navSort" value="{{.Sort}}" /></li>
+                        <li> 关联商品:<input type="text" name="navRelation" value="{{.Relation}}" /></li>
+                        <li> 新窗口打开: <input type="radio" name="navIsNewOpen" value="1" {{if eq .IsOpennew 1}} checked
+                                {{end}} />是&nbsp;&nbsp;<input type="radio" name="navIsNewOpen" value="0" {{if eq
+                                .IsOpennew 0}} checked {{end}} />否</li>
+                        <li> 导航状态: <input type="radio" name="navStatus" value="1" {{if eq .Status 1}} checked
+                                {{end}} />显示&nbsp;&nbsp;<input type="radio" name="navStatus" value="0" {{if eq .Status
+                                0}} checked {{end}} />不显示</li>
+                        {{end}}
+                        <li><input type="hidden" name="pageNumber" value="{{.pageNumber}}"></li>
+
+                        <li>
+                            <br />
+                            <button type="submit" class="btn btn-default">提交</button>
+                        </li>
+
+                    </ul>
+
+
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+{{end}}

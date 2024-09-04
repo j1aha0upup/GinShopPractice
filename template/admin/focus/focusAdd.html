@@ -1,0 +1,37 @@
+{{define "admin/focus/focusAdd.html"}}
+{{template "admin/public/publicImoport.html" .}}
+<div class="col-sm-10">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            增加轮播图
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive input-form">
+                <form action="/admin/doFocusAdd" method="post" enctype="multipart/form-data">
+                    <ul>
+                        <li> 轮播图标题: <input type="text" name="focus_title" /></li>
+                        <li> 轮播图类型:
+                            <select name="focus_type">
+                                <option value="1">网页轮播图</option>
+                                <option value="2">小程序轮播图</option>
+                                <option value="3">APP轮播图</option>
+                            </select>
+                        </li>
+                        <li> 轮播图图片: <input type="file" name="focus_img" /></li>
+                        <li> 轮播图跳转链接: <input type="text" name="focus_link" /></li>
+                        <li> 轮播图排序: <input type="text" name="focus_sort" /></li>
+                        <li> 轮播图状态: <input type="radio" name="focus_status" value="1" checked />显示&nbsp;&nbsp;<input
+                                type="radio" name="focus_status" value="0" />不显示</li>
+
+                        <li>
+                            <br />
+                            <button type="submit" class="btn btn-default">提交</button>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}

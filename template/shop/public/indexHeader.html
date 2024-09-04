@@ -1,0 +1,82 @@
+{{define "shop/public/indexHeader.html"}}
+<!-- start header -->
+<header>
+    <div class="top center">
+        <div class="left fl">
+            <ul>
+                {{range $k,$v:= .topNav}}
+                <li><a href="{{.Link}}">{{.Title}}</a></li>
+                {{if ne $k $.topNavLen}}
+                <li>|</li>
+                {{end}}
+                {{end}}
+            </ul>
+        </div>
+        <div class="right fr">
+            <div class="gouwuche fr"><a href="/cart">购物车</a></div>
+            <div class="fr">
+                {{if .isLogin}}
+                <ul>
+                    <li><a href="/usercenter?userid={{.user.Id}}">{{.user.UserName}},您好</a></li>
+                </ul>
+                {{else}}
+                <ul>
+                    <li><a href="/login" target="_blank">登录</a></li>
+                    <li>|</li>
+                    <li><a href="/register" target="_blank">注册</a></li>
+                </ul>
+                {{end}}
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</header>
+<!--end header -->
+
+<!-- start banner_x -->
+<div class="banner_x center">
+    <a href="/index" target="_blank">
+        <div class="logo fl"></div>
+    </a>
+    <a href="#">
+        <div class="ad_top fl"></div>
+    </a>
+    <div class="nav fl">
+        <ul class="clearfix" id="nav_list">
+            {{range .middleNav}}
+            <li>
+                <a href="{{.Link}}">{{.Title}}</a>
+                {{$tempLen := len .RelationGoodsList}}
+                {{if ne $tempLen 0}}
+                <ol class="children-list clearfix">
+                    {{range .RelationGoodsList}}
+                    <li>
+                        <a href="detail?goodsId={{.Id}}">
+                            <img src="/{{.GoodsImage}}" />
+                            <p>{{.Title}}</p>
+                        </a>
+                    </li>
+                    {{end}}
+                </ol>
+                {{end}}
+            </li>
+            {{end}}
+        </ul>
+    </div>
+    <!-- 搜索商品 -->
+    <div class="search fr">
+        <form action="" method="post">
+            <div class="text fl">
+                <input type="text" class="shuru" placeholder="搜索商品">
+            </div>
+            <div class="submit fl">
+                <input type="submit" class="sousuo" value="搜索" />
+            </div>
+            <div class="clear"></div>
+        </form>
+        <div class="clear"></div>
+    </div>
+</div>
+<!-- end banner_x -->
+{{end}}

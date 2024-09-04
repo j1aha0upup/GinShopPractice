@@ -1,0 +1,68 @@
+{{define "shop/index/index.html"}}
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="author" content="order by dede58.com" />
+	<title>商城</title>
+	<link rel="stylesheet" type="text/css" href="/static/shop/css/style.css">
+	<link rel="stylesheet" href="/static/shop/css/swiper.min.css">
+
+	<script src="/static/shop/js/jquery-1.10.1.js"></script>
+	<script src="/static/shop/js/swiper.min.js"></script>
+	<script src="/static/shop/js/base.js"> </script>
+</head>
+
+<body>
+	{{template "shop/public/indexHeader.html" .}}
+	<div class="banner_y center">
+		<div class="nav">
+			<ul>
+				{{range .goodsCate}}
+				<li>
+					<!-- <a href="{{.Link}}" target="_blank">{{.Title}}</a> -->
+					<a href="category{{.Id}}" target="_blank">{{.Title}}</a>
+					<div class="pop">
+						<ol class="cate_list clear">
+							{{range .GoodsCateList}}
+							<li>
+								<div class="xuangou_left">
+									<!-- <a href="{{.Link}}" target="_blank" class="clearfix">
+										<div class="img fl"><img src="/{{.CateImage}}" alt="{{.Title}}">
+										</div>
+										<span class="fl">{{.Title}}</span>
+									</a> -->
+									<a href="category{{.Id}}" target="_blank" class="clearfix">
+										<div class="img fl"><img src="/{{.CateImage}}" alt="{{.Title}}">
+										</div>
+										<span class="fl">{{.Title}}</span>
+									</a>
+								</div>
+							</li>
+							{{end}}
+						</ol>
+					</div>
+				</li>
+				{{end}}
+			</ul>
+		</div>
+		<div class="swiper-container">
+			<div class="swiper-wrapper">
+				{{range .focus}}
+				<div class="swiper-slide">
+					<img src="/{{.FocusImg}}" href="{{.Link}}" alt="{{.Title}}" />
+				</div>
+				{{end}}
+			</div>
+			<!-- Add Arrows -->
+			<div class="swiper-button-next"></div>
+			<div class="swiper-button-prev"></div>
+		</div>
+
+	</div>
+	{{template "shop/public/publicFooter.html" .}}
+</body>
+
+</html>
+{{end}}

@@ -1,0 +1,11 @@
+{{define "shop/public/publicFooter.html"}}
+<!-- start header -->
+<footer class="mt20 center">
+    <div class="mt20">{{range $k,$v:= .footerNav}}<a href="{{.Link}}">{{.Title}}</a>{{if ne $k
+        $.topNavLen}}|{{end}}{{end}}
+    </div>
+    <div>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</div>
+    <div>违法和不良信息举报电话：110 110 110，本网站所列数据，除特殊说明，所有数据均出自我司实验室测试</div>
+</footer>
+<!--end header -->
+{{end}}

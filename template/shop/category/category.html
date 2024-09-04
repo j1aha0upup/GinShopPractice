@@ -1,0 +1,55 @@
+{{define "shop/category/category.html"}}
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="author" content="order by dede58.com" />
+	<title>分类列表</title>
+	<link rel="stylesheet" type="text/css" href="/static/shop/css/style.css">
+	<link rel="stylesheet" href="/static/css/basic.css">
+	<script type="text/javascript" src="/static/bootstrap/js/jquery-1.10.1.js"></script>
+	<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+</head>
+
+<body>
+	{{ template "shop/public/publicHeader.html" .}}
+	{{ template "shop/public/publicMiddle.html" .}}
+	<!-- start danpin -->
+	<div class="danpin center">
+		<div class="biaoti center">小米手机</div>
+		<div class="main center mb20">
+			{{range .categoryGoodsList}}
+			<div class="mingxing fl mb20" style="border:2px solid #fff;width:230px;cursor:pointer;"
+				onmouseout="this.style.border='2px solid #fff'" onmousemove="this.style.border='2px solid red'">
+				<div class="sub_mingxing"><a href="/detail?goodsId={{.Id}}"><img src="/{{.GoodsImage}}"
+							alt="{{.Title}}"></a></div>
+				<div class="pinpai"><a href="">{{.Title}}</a></div>
+				<div class="youhui">{{.SubTitle}}</div>
+				<div class="jiage">{{.MarketPrice}}元</div>
+			</div>
+			{{end}}
+		</div>
+		<div class="clear"></div>
+		<div class="pagination" id="pagination"></div>
+	</div>
+	{{ template "shop/public/publicFooter.html" .}}
+	<!-- end danpin -->
+</body>
+
+<script src="/static/js/jq-paginator.js"></script>
+<script>
+	$('#pagination').jqPaginator({
+		totalPages: {{.pagination.TotalPages }},
+		visiblePages: {{.pagination.VisiblePages }},
+		currentPage: {{.pagination.CurrentPage }},
+		onPageChange: function (num, type) {
+			if (type != 'init') {
+				location.href = "/category{{.categoryId}}?page=" + num;
+			}
+		},
+    })
+</script>
+
+</html>
+{{end}}

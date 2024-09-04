@@ -1,0 +1,84 @@
+{{ define "shop/checkout/pay.html" }}
+
+{{ template "shop/public/publicHeader.html" .}}
+<!--end header -->
+<link rel="stylesheet" href="/static/shop/css/pay.css" />
+<!-- start banner_x -->
+<div class="banner_x center clearfix">
+	<a href="/" target="_blank">
+		<div class="logo fl"></div>
+	</a>
+	<div class="wdgwc fl ml40">支付页面 </div>
+</div>
+
+<div class="page-main">
+	<div class="checkout-box">
+		<div class="section section-order">
+			<div class="order-info clearfix">
+				<div class="fl">
+					<h2 class="title">订单提交成功！去付款咯～</h2>
+					<p class="order-time" id="J_deliverDesc"></p>
+					<p class="order-time">请在<span class="pay-time-tip">47小时59分</span>内完成支付, 超时后将取消订单</p>
+					{{with .order}}
+					<p class="post-info" id="J_postInfo">
+						收货信息： {{.Name}} &nbsp;&nbsp;{{.Phone}} &nbsp;&nbsp; {{.Address}}
+					</p>
+				</div>
+				<div class="fr">
+					<p class="total">
+						应付总额：<span class="money"><em>{{.TotalPrice}}</em>元</span>
+					</p>
+					<br>
+					<br>
+					<a href="javascript:void(0);" class="show-detail" id="J_showDetail"
+						data-stat-id="db85b2885a2fdc53">订单详情</a>
+				</div>
+			</div>
+			<i class="iconfont icon-right">√</i>
+			<div class="order-detail">
+				<ul>
+					<li class="clearfix">
+						<div class="label">订单号：</div>
+						<div class="content">
+							<span class="order-num">{{.OrderSn}}</span>
+						</div>
+
+					</li>
+					<li class="clearfix">
+						<div class="label">收货信息：</div>
+						<div class="content">
+							收货信息： {{.Name}} &nbsp;&nbsp;{{.Phone}} &nbsp;&nbsp; {{.Address}} </div>
+					</li>
+					{{end}}
+					<li class="clearfix">
+						<div class="label">商品：</div>
+						<div class="content">
+							{{range .orderItemList}}
+							<p>{{.GoodsTitle}} {{.GoodsVersion}} {{.GoodsColor}}
+								数量：{{.GoodsNum}} 价格：{{.GoodsPrice}}</p>
+							{{end}}
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+
+	</div>
+</div>
+
+{{ template "shop/public/publicFooter.html" .}}
+</body>
+
+</html>
+
+<script>
+	$(function () {
+
+		$(".show-detail").click(function () {
+
+			$(".order-detail").slideToggle();
+		})
+	})
+</script>
+{{end}}

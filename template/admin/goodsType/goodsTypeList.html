@@ -1,0 +1,70 @@
+{{define "admin/goodsType/goodsTypeList.html"}}
+
+<body>
+    {{template "admin/public/publicImoport.html" .}}
+    <div class="col-sm-10">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                搜索
+            </div>
+            <div class="panel-body">
+                <form role="form" class="form-inline">
+                    <div class="form-group">
+                        <label for="name">名称</label>
+                        <input type="text" class="form-control" id="name" placeholder="请输入名称">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-default">开始搜索</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!--
+    列表展示
+-->
+        <div class="table-responsive">
+            <button><a href="/admin/goodsTypeAdd">商品类型添加</a></button>
+            <table class="table table-bordered">
+                <thead>
+                    <tr class="th">
+                        <th>商品类型标题</th>
+                        <th>商品类型描述</th>
+                        <th>商品类型增加时间</th>
+                        <th>商品类型状态</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{range .goodsType}}
+                    <tr>
+                        <td>{{.Title}}</td>
+                        <td>{{.Description}}</td>
+                        <td>{{Unix2Time .AddTime}}</td>
+
+                        <td>
+                            {{if eq .Status 1}}
+                            <button><img src="/static/images/yes.gif" alt="status OK" class="changeStatusButton"
+                                    data-id="{{.Id}}" data-table_name="goods_type"
+                                    data-status_value="{{.Status}}"></button>
+                            {{else}}
+                            <button><img src="/static/images/no.gif" alt="status NO" class="changeStatusButton"
+                                    data-id="{{.Id}}" data-table_name="goods_type"
+                                    data-status_value="{{.Status}}"></button>
+                            {{end}}
+                        </td>
+                        <td class="text-center">
+                            <a href="/admin/goodsTypeAttributeList?goodsTypeId={{.Id}}">
+                                属性列表</a>
+                            <a href="/admin/goodsTypeEdit?goodsTypeId={{.Id}}">
+                                修改</a>
+                            <a class="deleteConfirm" title="{{.Title}}"
+                                href="/admin/goodsTypeDelete?goodsTypeId={{.Id}}">删除</a>
+                        </td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+{{end}}
