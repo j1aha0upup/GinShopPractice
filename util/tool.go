@@ -18,3 +18,9 @@ func Markdown2Html(temp string) template.HTML {
 func GoodsPriceMulGoodsNum(price float64, num int) float64 {
 	return price * float64(num)
 }
+func TitleStrCut(temp string, cutNum int) string {
+	if len(temp) > cutNum {
+		temp = temp[0:cutNum]
+	}
+	return temp
+}

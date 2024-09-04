@@ -54,7 +54,7 @@
                     <li>
                         <a href="detail?goodsId={{.Id}}">
                             <img src="/{{.GoodsImage}}" />
-                            <p>{{.Title}}</p>
+                            <p>{{TitleStrCut .Title 19}}</p>
                         </a>
                     </li>
                     {{end}}

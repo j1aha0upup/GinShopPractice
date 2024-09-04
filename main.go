@@ -22,6 +22,7 @@ func main() {
 		"AttributeOptionList":   model.AttributeOptionList,
 		"Markdown2Html":         util.Markdown2Html,
 		"GoodsPriceMulGoodsNum": util.GoodsPriceMulGoodsNum,
+		"TitleStrCut":           util.TitleStrCut,
 	})
 
 	//加载模板
